@@ -22,7 +22,6 @@ namespace BSI_PasswordWallet.Infrastructure.Repository
         {
             _dbContext.Add(user);
             await _dbContext.SaveChangesAsync();
-            return;
         }
 
         public async Task<User> GetUserAsync(string login)

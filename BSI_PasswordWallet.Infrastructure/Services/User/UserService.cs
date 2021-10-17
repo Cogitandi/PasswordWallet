@@ -1,13 +1,9 @@
-﻿using BSI_PasswordWallet.Core.Repository;
+﻿using BSI_PasswordWallet.Core.Domain;
+using BSI_PasswordWallet.Core.Repository;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
-using BSI_PasswordWallet.Infrastructure.ResponseModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BSI_PasswordWallet.Infrastructure.Services.User
+namespace BSI_PasswordWallet.Infrastructure.Services.UserService
 {
     public class UserService : IUserService
     {
@@ -18,16 +14,18 @@ namespace BSI_PasswordWallet.Infrastructure.Services.User
             _userRepository = userRepository;
         }
 
-        public async Task<GetUserByIdModel> GetUserByIdAsync(GetUserByIdRequest model)
+        public async Task<User> GetUserAsync(GetUserByLoginRequest model)
         {
             var core = await _userRepository.GetUserAsync(model.Login);
 
-            var result = new GetUserByIdModel()
-            {
-                Login = core.Login,
-                Password = core.PasswordHash
-            };
-            return result;
+            return core;
+        }
+
+        public async Task<bool> Login(LoginRequest request)
+        {
+            User user = await _userRepository.GetUserAsync(request.Login);
+            bool credentialsOk = user != null && user.PasswordHash == request.Password;
+            return credentialsOk;
         }
     }
 }
