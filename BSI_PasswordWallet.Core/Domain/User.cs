@@ -19,6 +19,7 @@ namespace BSI_PasswordWallet.Core.Domain
         public User(string login, string password, bool isPasswordKeptAsHash)
         {
             Login = login;
+            PasswordHash = password;
             IsPasswordKeptAsHash = isPasswordKeptAsHash;
         }
     }

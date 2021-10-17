@@ -14,6 +14,12 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
             _userRepository = userRepository;
         }
 
+        public async Task CreateAccount(CreateAccountRequest request)
+        {
+            User user = new User(request.Login, request.Password, request.IsPasswordKeptAsHash);
+            await _userRepository.AddUserAsync(user);
+        }
+
         public async Task<User> GetUserAsync(GetUserByLoginRequest model)
         {
             var core = await _userRepository.GetUserAsync(model.Login);
@@ -21,7 +27,7 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
             return core;
         }
 
-        public async Task<bool> Login(LoginRequest request)
+        public async Task<bool> IsCredentialsValidAsync(LoginRequest request)
         {
             User user = await _userRepository.GetUserAsync(request.Login);
             bool credentialsOk = user != null && user.PasswordHash == request.Password;

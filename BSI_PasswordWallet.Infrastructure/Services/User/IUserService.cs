@@ -6,7 +6,8 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
 {
     public interface IUserService : IService
     {
-        public Task<User> GetUserAsync(GetUserByLoginRequest id);
-        public Task<bool> Login(LoginRequest request);
+        public Task CreateAccount(CreateAccountRequest request);
+        public Task<User> GetUserAsync(GetUserByLoginRequest request);
+        public Task<bool> IsCredentialsValidAsync(LoginRequest request);
     }
 }
