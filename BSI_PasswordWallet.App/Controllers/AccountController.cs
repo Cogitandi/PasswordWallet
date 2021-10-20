@@ -31,6 +31,7 @@ namespace BSI_PasswordWallet.App.Controllers
         }
         public async Task<IActionResult> Login()
         {
+            TempData["message"] = "Test";
             return View();
         }
         [HttpPost]
