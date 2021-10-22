@@ -8,23 +8,20 @@ using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Commands.CreateUser
 {
-    class CreateUserHandler : ICommandHandler<CreateUserCommand>
+    public class CreateUserHandler : ICommandHandler<CreateUserCommand>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPasswordRepository _passwordRepository;
+        
 
-        public CreateUserHandler(IUserRepository userRepository, IPasswordRepository passwordRepository)
+        public CreateUserHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _passwordRepository = passwordRepository;
         }
 
         public async Task HandleAsync(CreateUserCommand command)
         {
             var user = new User(command.Login, command.Password, true);
             await _userRepository.AddUserAsync(user);
-
-            return;
         }
     }
 }

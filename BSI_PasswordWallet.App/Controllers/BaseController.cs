@@ -1,4 +1,5 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
+using BSI_PasswordWallet.Infrastructure.Commands;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
 using BSI_PasswordWallet.Infrastructure.Services.UserService;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +13,13 @@ namespace BSI_PasswordWallet.App.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected IUserService _userService;
+        protected readonly IUserService _userService;
+        protected readonly ICommandDispatcher _dispatcher;
 
         protected BaseController(IServiceProvider serviceProvider)
         {
             _userService = serviceProvider.GetService<IUserService>();
+            _dispatcher = serviceProvider.GetService<ICommandDispatcher>();
         }
         protected async Task<User> GetUser()
         {

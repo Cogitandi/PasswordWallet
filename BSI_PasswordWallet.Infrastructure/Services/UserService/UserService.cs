@@ -1,5 +1,6 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
+using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
 using System.Threading.Tasks;
 
@@ -14,9 +15,9 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
             _userRepository = userRepository;
         }
 
-        public async Task CreateAccount(CreateAccountRequest request)
+        public async Task CreateAccount(CreateUserCommand command)
         {
-            User user = new User(request.Login, request.Password, request.IsPasswordKeptAsHash);
+            User user = new User(command.Login, command.Password, command.IsPasswordKeptAsHash);
             await _userRepository.AddUserAsync(user);
         }
 

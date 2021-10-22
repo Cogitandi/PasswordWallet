@@ -32,7 +32,7 @@ namespace BSI_PasswordWallet.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<PostgresContext>();
+            services.AddScoped<PostgresContext>();
             services.AddSession(options=>
             {
                 options.IdleTimeout = new TimeSpan(0, 0, 30);

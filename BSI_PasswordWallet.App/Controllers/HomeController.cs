@@ -13,24 +13,16 @@ namespace BSI_PasswordWallet.App.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly ICommandDispatcher _dispatcher;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, ICommandDispatcher dispatcher, IServiceProvider serviceProvider) : base(serviceProvider)
+        public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _logger = logger;
-            _dispatcher = dispatcher;
         }
 
         public async Task<IActionResult> Index()
         {
             return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] CreateUserCommand command)
-        {
-            await _dispatcher.DispatchAsync(command);
-            return Ok();
         }
 
         [Authorize]

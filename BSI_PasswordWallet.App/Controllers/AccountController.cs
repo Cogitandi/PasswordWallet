@@ -1,4 +1,5 @@
-﻿using BSI_PasswordWallet.Infrastructure.MVC;
+﻿using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
+using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace BSI_PasswordWallet.App.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAccount([FromForm]CreateAccountRequest request)
+        public async Task<IActionResult> CreateAccount([FromForm]CreateUserCommand request)
         {
             await _userService.CreateAccount(request);
             return RedirectToAction("Index", "Home");
