@@ -1,4 +1,5 @@
-﻿using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
+﻿using BSI_PasswordWallet.Infrastructure.Commands.ChangePassword;
+using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
 using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
 using Microsoft.AspNetCore.Http;
@@ -25,11 +26,18 @@ namespace BSI_PasswordWallet.App.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAccount([FromForm]CreateUserCommand request)
+        public async Task<IActionResult> CreateAccount([FromForm]CreateUserCommand command)
         {
-            await _userService.CreateAccount(request);
-            TempData["message"] = "Konto zostało utworzone pomyślnie.";
-            return RedirectToAction("Login", "Account");
+            try
+            {
+                await _dispatcher.DispatchAsync(command);
+                TempData["message"] = "Konto zostało utworzone pomyślnie.";
+                return RedirectToAction("Login", "Account");
+            } catch(Exception e)
+            {
+                TempData["message"] = $"Błąd: {e.Message}";
+            }
+            return View();  
         }
         public async Task<IActionResult> Login()
         {
@@ -55,6 +63,24 @@ namespace BSI_PasswordWallet.App.Controllers
             HttpContext.Session.Clear();
             TempData["message"] = "Zostałeś wylogowany pomyślnie";
             return RedirectToAction("Index", "Home");
+        }
+        public async Task<IActionResult> ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordCommand command)
+        {
+            command.User = await GetUser();
+            try
+            {
+                await _dispatcher.DispatchAsync(command);
+                TempData["message"] = "Hasło zostało zmienione";
+            } catch(Exception e)
+            {
+                TempData["message"] = $"Błąd: {e.Message}";
+            }
+            return View();
         }
 
     }

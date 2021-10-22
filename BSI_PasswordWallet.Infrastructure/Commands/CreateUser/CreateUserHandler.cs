@@ -1,5 +1,6 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
+using BSI_PasswordWallet.Infrastructure.Services.UserService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,16 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.CreateUser
 {
     public class CreateUserHandler : ICommandHandler<CreateUserCommand>
     {
-        private readonly IUserRepository _userRepository;
-        
+        private readonly IUserService _userService;
 
-        public CreateUserHandler(IUserRepository userRepository)
+        public CreateUserHandler(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task HandleAsync(CreateUserCommand command)
         {
-            var user = new User(command.Login, command.Password, true);
-            await _userRepository.AddUserAsync(user);
+            await _userService.CreateAccount(command);
         }
     }
 }

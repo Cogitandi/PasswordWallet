@@ -1,7 +1,9 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
+using BSI_PasswordWallet.Infrastructure.Commands.ChangePassword;
 using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
+using System;
 using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Services.UserService
@@ -17,6 +19,11 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
 
         public async Task CreateAccount(CreateUserCommand command)
         {
+            var userWithSameName = await _userRepository.GetUserAsync(command.Login);
+            if(userWithSameName != null)
+            {
+                throw new Exception($"User {command.Login} already exist");
+            }
             User user = new User(command.Login, command.Password, command.IsPasswordKeptAsHash);
             await _userRepository.AddUserAsync(user);
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,16 @@ namespace BSI_PasswordWallet.Core.Domain
         {
             Login = login;
             PasswordHash = password;
+            Salt = User.GenerateSalt();
             IsPasswordKeptAsHash = isPasswordKeptAsHash;
+        }
+        public string GetPasswordHash(string rawPassword)
+        {
+            return rawPassword;
+        }
+        public string GetUserPassword()
+        {
+            return PasswordHash;
         }
         public static byte[] SHA512(string text)
         {
@@ -45,6 +55,16 @@ namespace BSI_PasswordWallet.Core.Domain
             hmac.DoFinal(result, 0);
 
             return result;
+        }
+        public static string GenerateSalt()
+        {
+            // generate a 128-bit salt using a cryptographically strong random sequence of nonzero values
+            byte[] salt = new byte[128 / 8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetNonZeroBytes(salt);
+            }
+            return Convert.ToBase64String(salt);
         }
     }
 }

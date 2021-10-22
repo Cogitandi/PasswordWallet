@@ -11,5 +11,6 @@ namespace BSI_PasswordWallet.Core.Repository
     {
         public Task AddUserAsync(User user);
         public Task<User> GetUserAsync(string login);
+        public Task UpdateUserAsync(User user);
     }
 }

@@ -29,5 +29,10 @@ namespace BSI_PasswordWallet.Infrastructure.Repository
             var user = _dbContext.Users.FirstOrDefault(u => u.Login == login);
             return user;
         }
+        public async Task UpdateUserAsync(User user)
+        {
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
