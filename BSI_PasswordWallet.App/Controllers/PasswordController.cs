@@ -34,6 +34,7 @@ namespace BSI_PasswordWallet.App.Controllers
         {
             command.User = await GetUser();
             await _dispatcher.DispatchAsync(command);
+            TempData["message"] = "Dodano nowe hasło";
             return RedirectToAction("ViewPasswords");
         }
     }

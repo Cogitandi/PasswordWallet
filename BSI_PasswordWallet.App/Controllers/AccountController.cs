@@ -28,11 +28,12 @@ namespace BSI_PasswordWallet.App.Controllers
         public async Task<IActionResult> CreateAccount([FromForm]CreateUserCommand request)
         {
             await _userService.CreateAccount(request);
-            return RedirectToAction("Index", "Home");
+            TempData["message"] = "Konto zostało utworzone pomyślnie.";
+            return RedirectToAction("Login", "Account");
         }
         public async Task<IActionResult> Login()
         {
-            TempData["message"] = "Test";
+            
             return View();
         }
         [HttpPost]
@@ -44,6 +45,7 @@ namespace BSI_PasswordWallet.App.Controllers
             {
                 var accessToken = JWTToken.GenerateJSONWebToken(request.Login);
                 HttpContext.Session.SetString("Token", accessToken);
+                TempData["message"] = "Zalogowano pomyślnie";
                 return RedirectToAction("Index","Home");
             }
             return View();
@@ -51,6 +53,7 @@ namespace BSI_PasswordWallet.App.Controllers
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Clear();
+            TempData["message"] = "Zostałeś wylogowany pomyślnie";
             return RedirectToAction("Index", "Home");
         }
 
