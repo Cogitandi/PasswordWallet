@@ -20,12 +20,20 @@ namespace BSI_PasswordWallet.Infrastructure.Services.PasswordService
             _passwordRepository = passwordRepository;
         }
 
-        public async Task<UserPasswordsResponse> GetUserPasswords(User user)
+        public async Task<UserPasswordsResponse> GetUserPasswords(User user, bool returnDecrypted)
         {
             var model = new UserPasswordsResponse();
             var passwordsCore = await _passwordRepository.GetPasswordsAsync(user);
-            var passwords = passwordsCore.Select(x => new UserPassword(x.PasswordValue)).ToList();
-            model.Passwords = passwords;
+            if(returnDecrypted)
+            {
+                model.Passwords = passwordsCore.Select(x => new UserPassword(x.PasswordValue+" odkodowane")).ToList();
+                model.ShowDecoded = true;
+            } else
+            {
+                model.Passwords = passwordsCore.Select(x => new UserPassword(x.PasswordValue)).ToList();
+                model.ShowDecoded = false;
+            }
+            
             return model;
         }
     }

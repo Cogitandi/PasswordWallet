@@ -12,6 +12,6 @@ namespace BSI_PasswordWallet.Infrastructure.Services.PasswordService
 {
     public interface IPasswordService : IService
     {
-        public Task<UserPasswordsResponse> GetUserPasswords(User user);
+        public Task<UserPasswordsResponse> GetUserPasswords(User user, bool returnDecrypted);
     }
 }

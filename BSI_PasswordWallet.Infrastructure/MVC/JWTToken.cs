@@ -25,18 +25,20 @@ namespace BSI_PasswordWallet.Infrastructure.MVC
                 await next();
             });
         }
-        public static string GenerateJSONWebToken(string login)
+        public static string GenerateJSONWebToken(string login, bool showDecryptedPasswords = false)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("PasswordWalletSecretKey"));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            var claims = new List<Claim>();
+            claims.Add(new Claim("login", login));
+            claims.Add(new Claim("showDecrypted", showDecryptedPasswords.ToString()));
+
+
             var token = new JwtSecurityToken(
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: credentials,
-                claims: new List<Claim>()
-                {
-                    new Claim("login",login)
-                }
+                claims: claims
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

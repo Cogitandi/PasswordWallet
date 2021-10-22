@@ -8,6 +8,7 @@ namespace BSI_PasswordWallet.Infrastructure.ResponseModels
 {
     public class UserPasswordsResponse
     {
+        public bool ShowDecoded { get; set; }
         public List<UserPassword> Passwords { get; set; }
     }
     public class UserPassword
