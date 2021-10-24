@@ -13,11 +13,18 @@ namespace BSI_PasswordWallet.Infrastructure.ResponseModels
     }
     public class UserPassword
     {
-        public string Hash { get; set; }
-
-        public UserPassword(string hash)
+        public UserPassword(string login, string password, string webAddress, string description)
         {
-            Hash = hash;
+            Login = login;
+            Password = password;
+            WebAddress = webAddress;
+            Description = description;
         }
+
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string WebAddress { get; set; }
+        public string Description { get; set; }
+
     }
 }

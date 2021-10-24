@@ -29,9 +29,19 @@ namespace BSI_PasswordWallet.Infrastructure.Repository
         {
             List<Password> userPasswords = await _dbContext.Passwords
                                                            .Where(p => p.User == user)
-                                                           .AsNoTracking()
+                                                           
                                                            .ToListAsync();
             return userPasswords;
+        }
+
+        public async Task UpdateAsync(params Password[] passwords)
+        {
+            foreach(Password item in passwords)
+            {
+                _dbContext.Passwords.Update(item);
+            }
+            //_dbContext.Passwords.Update(password);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

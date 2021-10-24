@@ -10,6 +10,6 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.CreateUser
     {
         public string Login { get; set; }
         public string Password { get; set; }
-        public bool IsPasswordKeptAsHash { get; set; }
+        public bool IsPasswordKeptAsSHA512 { get; set; }
     }
 }

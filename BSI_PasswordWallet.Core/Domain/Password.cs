@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,21 +13,21 @@ namespace BSI_PasswordWallet.Core.Domain
         {
 
         }
-        public Password(string passwordValue, User user, string webAddress, string description, string login)
+
+        public Password(User user, string login, string passwordValue, string webAddress, string description)
         {
-            PasswordValue = passwordValue;
             User = user;
+            Login = login;
+            PasswordValue = passwordValue;
             WebAddress = webAddress;
             Description = description;
-            Login = login;
         }
 
         public Guid Id { get; set; }
-        public string PasswordValue { get; set; }
         public User User { get; set; }
+        public string Login { get; set; }
+        public string PasswordValue { get; set; }
         public string WebAddress { get; set; }
         public string Description { get; set; }
-        public string Login { get; set; }
-
     }
 }

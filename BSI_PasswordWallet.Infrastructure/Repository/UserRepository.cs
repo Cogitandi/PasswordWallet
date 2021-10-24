@@ -1,6 +1,7 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
 using BSI_PasswordWallet.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace BSI_PasswordWallet.Infrastructure.Repository
 
         public async Task<User> GetUserAsync(string login)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Login == login);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Login == login);
             return user;
         }
         public async Task UpdateUserAsync(User user)

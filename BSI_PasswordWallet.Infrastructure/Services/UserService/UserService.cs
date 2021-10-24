@@ -2,7 +2,9 @@
 using BSI_PasswordWallet.Core.Repository;
 using BSI_PasswordWallet.Infrastructure.Commands.ChangePassword;
 using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
+using BSI_PasswordWallet.Infrastructure.Encryption;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
+using BSI_PasswordWallet.Infrastructure.Settings;
 using System;
 using System.Threading.Tasks;
 
@@ -11,21 +13,12 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly EncryptionSettings _encryptionSettings;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, EncryptionSettings encryptionSettings)
         {
             _userRepository = userRepository;
-        }
-
-        public async Task CreateAccount(CreateUserCommand command)
-        {
-            var userWithSameName = await _userRepository.GetUserAsync(command.Login);
-            if(userWithSameName != null)
-            {
-                throw new Exception($"User {command.Login} already exist");
-            }
-            User user = new User(command.Login, command.Password, command.IsPasswordKeptAsHash);
-            await _userRepository.AddUserAsync(user);
+            _encryptionSettings = encryptionSettings;
         }
 
         public async Task<User> GetUserAsync(GetUserByLoginRequest model)
@@ -38,8 +31,13 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
         public async Task<bool> IsCredentialsValidAsync(LoginRequest request)
         {
             User user = await _userRepository.GetUserAsync(request.Login);
-            bool credentialsOk = user != null && user.PasswordHash == request.Password;
-            return credentialsOk;
+            if(user==null)
+            {
+                throw new Exception("Incorrect credentials");
+            }
+            string pepper = _encryptionSettings.Pepper;
+            string passwordHash = EncryptionManager.GeneratePasswordHash(user.IsPasswordKeptAsSHA512, request.Password, user.Salt, pepper);
+            return user.PasswordHash == passwordHash;
         }
     }
 }

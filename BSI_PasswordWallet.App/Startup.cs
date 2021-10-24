@@ -65,6 +65,7 @@ namespace BSI_PasswordWallet.App
             // call builder.Populate(), that happens in AutofacServiceProviderFactory
             // for you.
             builder.RegisterModule(new ApplicationModule());
+            builder.RegisterModule(new SettingsModule(Configuration));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
