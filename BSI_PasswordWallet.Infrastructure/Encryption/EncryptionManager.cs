@@ -67,8 +67,7 @@ namespace BSI_PasswordWallet.Infrastructure.Encryption
             string CheckedPasswordHash;
             if (user.IsPasswordKeptAsSHA512)
             {
-                string SHA512Hash = GenerateSHA512(password);
-                CheckedPasswordHash = user.Salt + SHA512Hash + pepper;
+                CheckedPasswordHash = GenerateSHA512(pepper + user.Salt + password);
             }
             else
             {
@@ -81,8 +80,7 @@ namespace BSI_PasswordWallet.Infrastructure.Encryption
             string passwordHash;
             if (SHA512)
             {
-                string SHA512Hash = GenerateSHA512(password);
-                passwordHash = salt + SHA512Hash + pepper;
+                passwordHash = GenerateSHA512(pepper + salt + password);
             }
             else
             {
