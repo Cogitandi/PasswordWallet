@@ -1,12 +1,8 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
 using BSI_PasswordWallet.Infrastructure.Encryption;
-using BSI_PasswordWallet.Infrastructure.Services.UserService;
+using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Commands.CreateUser
@@ -27,7 +23,7 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.CreateUser
             User userWithSameName = await _userRepository.GetUserAsync(command.Login);
             if (userWithSameName != null)
             {
-                throw new Exception($"User {command.Login} already exist");
+                throw new ErrorException($"User {command.Login} already exist");
             }
             string salt = EncryptionManager.GenerateSalt();
             string pepper = _encryptionSettings.Pepper;

@@ -1,11 +1,10 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
 using BSI_PasswordWallet.Infrastructure.Encryption;
+using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.Settings;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Commands.ChangePassword
@@ -29,9 +28,9 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.ChangePassword
             User user = command.User;
             var currentUserPasswordHash = user.PasswordHash;
             var enteredOldPasswordHash = EncryptionManager.GeneratePasswordHash(user.IsPasswordKeptAsSHA512, command.OldPassword, user.Salt, pepper);
-            if(currentUserPasswordHash != enteredOldPasswordHash)
+            if (currentUserPasswordHash != enteredOldPasswordHash)
             {
-                throw new Exception("Entered password is incorrect");
+                throw new ErrorException("Entered password is incorrect");
             }
 
             user.Salt = EncryptionManager.GenerateSalt();
@@ -43,7 +42,7 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.ChangePassword
                 string password = AesEncryptor.DecryptAES(item.PasswordValue, currentUserPasswordHash);
                 item.PasswordValue = AesEncryptor.EncryptAES(password, enteredNewPasswordHash);
             }
-            
+
             await _passwordRepository.UpdateAsync(userPasswords.ToArray());
             await _userRepository.UpdateUserAsync(user);
         }

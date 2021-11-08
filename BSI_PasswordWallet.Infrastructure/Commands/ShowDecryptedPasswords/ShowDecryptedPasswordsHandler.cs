@@ -3,10 +3,6 @@ using BSI_PasswordWallet.Infrastructure.Encryption;
 using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Commands.ShowDecryptedPasswords
@@ -31,10 +27,10 @@ namespace BSI_PasswordWallet.Infrastructure.Commands.ShowDecryptedPasswords
 
             if (currentPasswordHash != enteredPasswordHash)
             {
-                throw new Exception("You passed wrong password");
+                throw new ErrorException("You passed wrong password");
             }
 
-            var accessToken = JWTToken.GenerateJSONWebToken(command.User.Login,true);
+            var accessToken = JWTToken.GenerateJSONWebToken(command.User.Login, true);
             _httpContext.Session.SetString("Token", accessToken);
             await Task.CompletedTask;
         }

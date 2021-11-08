@@ -28,17 +28,10 @@ namespace BSI_PasswordWallet.App.Controllers
         public async Task<IActionResult> DecryptPassword([FromForm] ShowDecryptedPasswordsCommand command)
         {
             command.User = await GetUser();
-            try
-            {
-                await _dispatcher.DispatchAsync(command);
-                TempData["message"] = "Hasła zostały pomyślnie odkodowane.";
-                return RedirectToAction("ViewPasswords", "Password");
-            }
-            catch (Exception e)
-            {
-                TempData["message"] = $"Błąd: {e.Message}";
-            }
-            return View();
+
+            await _dispatcher.DispatchAsync(command);
+            TempData["message"] = "Hasła zostały pomyślnie odkodowane.";
+            return RedirectToAction("ViewPasswords", "Password");
         }
         public async Task<IActionResult> ViewPasswords()
         {

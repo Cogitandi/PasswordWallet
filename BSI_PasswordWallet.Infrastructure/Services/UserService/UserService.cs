@@ -1,11 +1,9 @@
 ﻿using BSI_PasswordWallet.Core.Domain;
 using BSI_PasswordWallet.Core.Repository;
-using BSI_PasswordWallet.Infrastructure.Commands.ChangePassword;
-using BSI_PasswordWallet.Infrastructure.Commands.CreateUser;
 using BSI_PasswordWallet.Infrastructure.Encryption;
+using BSI_PasswordWallet.Infrastructure.MVC;
 using BSI_PasswordWallet.Infrastructure.RequestModel;
 using BSI_PasswordWallet.Infrastructure.Settings;
-using System;
 using System.Threading.Tasks;
 
 namespace BSI_PasswordWallet.Infrastructure.Services.UserService
@@ -31,9 +29,9 @@ namespace BSI_PasswordWallet.Infrastructure.Services.UserService
         public async Task<bool> IsCredentialsValidAsync(LoginRequest request)
         {
             User user = await _userRepository.GetUserAsync(request.Login);
-            if(user==null)
+            if (user == null)
             {
-                throw new Exception("Incorrect credentials");
+                throw new ErrorException("Incorrect credentials");
             }
             string pepper = _encryptionSettings.Pepper;
             string passwordHash = EncryptionManager.GeneratePasswordHash(user.IsPasswordKeptAsSHA512, request.Password, user.Salt, pepper);

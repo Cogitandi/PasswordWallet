@@ -28,20 +28,12 @@ namespace BSI_PasswordWallet.App.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAccount([FromForm]CreateUserCommand command)
         {
-            try
-            {
-                await _dispatcher.DispatchAsync(command);
-                TempData["message"] = "Konto zostało utworzone pomyślnie.";
-                return RedirectToAction("Login", "Account");
-            } catch(Exception e)
-            {
-                TempData["message"] = $"Błąd: {e.Message}";
-            }
-            return View();  
+            await _dispatcher.DispatchAsync(command);
+            TempData["message"] = "Konto zostało utworzone pomyślnie.";
+            return RedirectToAction("Login", "Account");
         }
         public async Task<IActionResult> Login()
         {
-            
             return View();
         }
         [HttpPost]
@@ -55,6 +47,9 @@ namespace BSI_PasswordWallet.App.Controllers
                 HttpContext.Session.SetString("Token", accessToken);
                 TempData["message"] = "Zalogowano pomyślnie";
                 return RedirectToAction("Index","Home");
+            } else
+            {
+                TempData["message"] = "Błąd: Niepoprawne dane";
             }
             return View();
         }
@@ -72,14 +67,8 @@ namespace BSI_PasswordWallet.App.Controllers
         public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordCommand command)
         {
             command.User = await GetUser();
-            try
-            {
-                await _dispatcher.DispatchAsync(command);
-                TempData["message"] = "Hasło zostało zmienione";
-            } catch(Exception e)
-            {
-                TempData["message"] = $"Błąd: {e.Message}";
-            }
+            await _dispatcher.DispatchAsync(command);
+            TempData["message"] = "Hasło zostało zmienione";
             return View();
         }
 
